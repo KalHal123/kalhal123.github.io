@@ -11,4 +11,4 @@ This is my website and blog, in the future i will be sharing projects here about
 
 I hope you like the design, its inspired by the old internet and old windows menus which i really like hehe
 
-_- Th_
+*- Th*

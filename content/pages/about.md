@@ -10,6 +10,5 @@ You can contact me on discord, my username is: th_793
 
 :D
 
-_- Th_
-
+*- Th*
 
