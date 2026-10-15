@@ -1,0 +1,1 @@
+Drop images here. In Markdown use: ![alt](/images/file.png)
