@@ -1,8 +1,6 @@
 ---
 title: Ut enim ad minim veniam
 date: 2026-09-09
-tags: veniam, lorem
-summary: Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
 ---
 Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
 

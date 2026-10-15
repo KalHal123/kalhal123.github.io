@@ -1,8 +1,6 @@
 ---
 title: Lorem ipsum dolor sit amet
 date: 2026-10-15
-tags: lorem, ipsum
-summary: Lorem ipsum dolor sit amet.
 ---
 ## Lorem ipsum
 

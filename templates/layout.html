@@ -8,134 +8,23 @@
 </head>
 <body>
 <div class="desktop">
-
-  <nav class="icons" aria-label="Desktop shortcuts">
-    <a class="icon" href="{{root}}index.html"><span>📁</span>Programs</a>
-    <a class="icon" href="{{root}}archive.html"><span>🗄️</span>File cabinet</a>
-    <a class="icon" href="{{root}}links.html"><span>🌐</span>Network</a>
-    <a class="icon" href="{{root}}guestbook.html"><span>📒</span>Guestbook</a>
-  </nav>
-
   <div class="hazard" role="presentation"></div>
 
-  <div class="grid">
-    <input type="checkbox" id="win-min" class="toggle" tabindex="-1" aria-hidden="true">
-    <input type="checkbox" id="win-max" class="toggle" tabindex="-1" aria-hidden="true">
+  <main class="win raised">
+    <div class="titlebar">{{title}} - {{site_name}}</div>
 
-    <!-- MAIN WINDOW -->
-    <main class="win raised">
-      <div class="titlebar">
-        <span class="name">{{title}} - {{site_name}}</span>
-        <label class="tbtn raised" for="win-min" title="Minimize">_</label>
-        <label class="tbtn raised" for="win-max" title="Maximize / restore">&#9633;</label>
-        <a class="tbtn raised" href="{{root}}index.html" title="Close (go home)">x</a>
-      </div>
+    <nav class="menubar">
+      <a href="{{root}}{{latest}}">Latest post</a>
+      <a href="{{root}}index.html">All posts</a>
+      <a href="{{root}}about.html">About</a>
+    </nav>
 
-      <div class="win-body">
-        <ul class="menubar">
-          <li><span class="mb" tabindex="0">File</span>
-            <ul>
-              <li><a href="{{root}}index.html">Home</a></li>
-              <li><a href="{{root}}archive.html">Archive</a></li>
-              <li><hr></li>
-              <li><a href="{{root}}index.html">Exit</a></li>
-            </ul>
-          </li>
-          <li><span class="mb" tabindex="0">Go</span>
-            <ul>
-              <li><a href="{{root}}{{latest}}">Latest post</a></li>
-              <li><a href="{{root}}about.html">About</a></li>
-              <li><a href="{{root}}links.html">Links</a></li>
-              <li><a href="{{root}}guestbook.html">Guestbook</a></li>
-            </ul>
-          </li>
-          <li><span class="mb" tabindex="0">Help</span>
-            <ul>
-              <li><a href="{{root}}help.html">How to write a post</a></li>
-              <li><a href="{{root}}about.html">About this blog</a></li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="toolbar">
-          <a class="btn raised" href="{{root}}index.html">Home</a>
-          <a class="btn raised" href="{{root}}archive.html">Archive</a>
-          <label>Address:</label>
-          <div class="addr sunken">{{address}}</div>
-        </div>
-
-        <article class="paper sunken">
+    <article class="paper sunken">
 {{content}}
-        </article>
-
-        <div class="status">
-          <div class="sunken">Done</div>
-          <div class="sunken">{{post_count}} posts</div>
-          <div class="sunken">Internet zone</div>
-        </div>
-      </div>
-    </main>
-
-    <!-- SIDEBAR -->
-    <aside class="stack">
-      <section class="win raised">
-        <div class="titlebar"><span class="name">File Cabinet</span></div>
-        <div class="side-body">
-          <ul class="list sunken">
-{{recent_posts}}
-          </ul>
-          <p style="text-align:right;margin:8px 0 0"><a class="btn raised" href="{{root}}archive.html">All posts</a></p>
-        </div>
-      </section>
-
-      <section class="win raised">
-        <div class="titlebar"><span class="name">About</span></div>
-        <div class="side-body">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <p>You are visitor <span class="counter">004127</span></p>
-          <p style="text-align:right;margin:10px 0 0"><a class="btn raised" href="{{root}}about.html">OK</a></p>
-        </div>
-      </section>
-
-      <section class="win raised">
-        <div class="titlebar"><span class="name">Network</span></div>
-        <div class="side-body">
-          <div class="badges">
-            <a class="badge b1" href="{{root}}index.html">{{site_name}}</a>
-            <a class="badge b2" href="mailto:{{email}}">E-Mail me</a>
-            <a class="badge b3" href="{{root}}links.html">Web ring</a>
-            <a class="badge b4" href="{{root}}guestbook.html">Guestbook</a>
-            <a class="badge b5" href="{{root}}archive.html">Archive</a>
-            <a class="badge b2" href="{{root}}about.html">About</a>
-          </div>
-        </div>
-      </section>
-    </aside>
-  </div>
+    </article>
+  </main>
 
   <div class="hazard" role="presentation"></div>
-</div>
-
-<!-- TASKBAR -->
-<div class="taskbar">
-  <details class="start">
-    <summary class="btn raised">Start</summary>
-    <ul class="start-menu raised">
-      <li><a href="{{root}}index.html">Home</a></li>
-      <li><a href="{{root}}{{latest}}">Latest post</a></li>
-      <li><a href="{{root}}archive.html">Archive</a></li>
-      <li><a href="{{root}}about.html">About</a></li>
-      <li><a href="{{root}}links.html">Links</a></li>
-      <li><a href="{{root}}guestbook.html">Guestbook</a></li>
-      <li><hr></li>
-      <li><a href="{{root}}help.html">Help</a></li>
-    </ul>
-  </details>
-  <span class="sep"></span>
-  <a class="btn raised task active" href="{{root}}{{path}}">{{title}}</a>
-  <a class="btn raised task" href="{{root}}archive.html">Archive</a>
-  <span class="spacer"></span>
-  <div class="tray sunken">7:50 AM</div>
 </div>
 </body>
 </html>

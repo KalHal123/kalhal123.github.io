@@ -3,19 +3,13 @@
 
     python build.py
 
-Reads Markdown from content/, fills templates/, writes plain HTML into docs/.
+Reads Markdown from content/, fills templates/layout.html, writes plain HTML into docs/.
 """
 import html, re
 from datetime import datetime, date
 from pathlib import Path
 
-# ---- settings -------------------------------------------------------------
-SITE_NAME = "Gray Boxes"
-SITE_URL = "http://grayboxes.example"   # only shown in the fake address bar
-EMAIL = "you@example.com"
-HOME_POSTS = 5        # posts listed on the home page
-SIDEBAR_POSTS = 6     # posts listed in the File Cabinet window
-# ---------------------------------------------------------------------------
+SITE_NAME = "Gray Boxes"     # shown in every title bar
 
 ROOT = Path(__file__).parent
 CONTENT, TEMPLATES, SITE = ROOT / "content", ROOT / "templates", ROOT / "docs"
@@ -94,97 +88,57 @@ def markdown(src, root=""):
     return "\n".join(out)
 
 
-def tpl(name):
-    return (TEMPLATES / name).read_text(encoding="utf-8")
-
-
-def fill(t, content=None, **values):
+def fill(content, **values):
+    t = (TEMPLATES / "layout.html").read_text(encoding="utf-8")
     for k, v in values.items():
         t = t.replace("{{%s}}" % k, str(v))
-    return t if content is None else t.replace("{{content}}", content)  # content last
-
-
-def post_list(posts, root, tags=False):
-    rows = []
-    for p in posts:
-        extra = ("<br><small>filed under: %s</small>" % ", ".join(p["tags"])) if tags and p["tags"] else ""
-        rows.append('<li><a href="%s%s">%s</a><span class="post-date">%s</span><br>'
-                    '<span class="post-summary">%s</span>%s</li>'
-                    % (root, p["url"], html.escape(p["title"]), p["date_str"], html.escape(p["summary"]), extra))
-    return '<ul class="post-list">\n' + "\n".join(rows) + "\n</ul>"
+    return t.replace("{{content}}", content)   # content last
 
 
 def main():
-    # ---- load posts ----
     posts = []
     for f in sorted((CONTENT / "posts").glob("*.md")):
         meta, body = parse(f)
         if meta.get("draft", "").lower() in ("true", "yes"):
             continue
         d = datetime.strptime(meta.get("date") or date.today().isoformat(), "%Y-%m-%d")
-        posts.append(dict(
-            url="posts/%s.html" % f.stem, body=body, date=d, date_str=d.strftime("%d %b %Y"),
-            title=meta.get("title") or f.stem.replace("-", " ").title(),
-            tags=[t.strip() for t in meta.get("tags", "").split(",") if t.strip()],
-            summary=meta.get("summary", "")))
+        posts.append(dict(url="posts/%s.html" % f.stem, body=body, date=d, date_str=d.strftime("%d %b %Y"),
+                          title=meta.get("title") or f.stem.replace("-", " ").title()))
     if not posts:
         raise SystemExit("No posts found in content/posts/")
     posts.sort(key=lambda p: p["date"], reverse=True)
 
-    # ---- clear old output (css/ and images/ are left alone) ----
+    # clear old pages (css/ and images/ are left alone)
     for old in list(SITE.glob("*.html")) + list((SITE / "posts").glob("*.html")):
         old.unlink()
 
     def write(path, title, content):
-        path = Path(path).as_posix()
-        root = "../" * path.count("/")
-        recent = "\n".join(
-            '<li><span>%s<a href="%s%s">%s</a></span><time>%s</time></li>'
-            % ('<span class="new">NEW</span> ' if n == 0 else "", root, p["url"],
-               html.escape(p["title"]), p["date"].strftime("%d %b"))
-            for n, p in enumerate(posts[:SIDEBAR_POSTS]))
-        page = fill(tpl("layout.html"), content=content,
-                    title=html.escape(title), site_name=SITE_NAME, root=root, path=path,
-                    address="%s/%s" % (SITE_URL, "" if path == "index.html" else path),
-                    latest=posts[0]["url"], email=EMAIL, post_count=len(posts), recent_posts=recent)
+        page = fill(content, title=html.escape(title), site_name=SITE_NAME,
+                    root="../" * path.count("/"), latest=posts[0]["url"])
         out = SITE / path
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(page, encoding="utf-8")
 
-    # ---- pages (content/pages/*.md -> docs/<name>.html; home.md -> index.html) ----
-    pages = 0
+    # home page = all posts (optional intro text from content/pages/home.md)
+    intro = ""
+    if (CONTENT / "pages" / "home.md").exists():
+        intro = markdown(parse(CONTENT / "pages" / "home.md")[1]) + "\n"
+    rows = "\n".join('<li><a href="%s">%s</a><time>%s</time></li>' % (p["url"], html.escape(p["title"]), p["date_str"])
+                     for p in posts)
+    write("index.html", "All posts", intro + "<h2>All posts</h2>\n<ul class=\"post-list\">\n" + rows + "\n</ul>")
+
+    # other pages, e.g. content/pages/about.md -> docs/about.html
     for f in sorted((CONTENT / "pages").glob("*.md")):
-        meta, body = parse(f)
-        body = markdown(body)
-        if f.stem == "home":
-            body += "\n<h2>Latest posts</h2>\n" + post_list(posts[:HOME_POSTS], "") + \
-                    '\n<p><a class="btn raised" href="archive.html">All posts</a></p>'
-            write(Path("index.html"), meta.get("title", "Home"), body)
-        else:
-            write(Path(f.stem + ".html"), meta.get("title", f.stem.title()), body)
-        pages += 1
+        if f.stem != "home":
+            meta, body = parse(f)
+            write(f.stem + ".html", meta.get("title", f.stem.title()), markdown(body))
 
-    # ---- archive ----
-    write(Path("archive.html"), "Archive",
-          "<h1>Archive</h1>\n<p class=\"meta\">%d posts, newest first</p>\n" % len(posts) + post_list(posts, "", tags=True))
+    # each post
+    for p in posts:
+        write(p["url"], p["title"], "<h1>%s</h1>\n<p class=\"meta\">%s</p>\n%s" % (
+            html.escape(p["title"]), p["date_str"], markdown(p["body"], "../")))
 
-    # ---- posts ----
-    def nav(label, p, root):
-        if p is None:
-            return '<span class="btn raised disabled">%s</span>' % label
-        return '<a class="btn raised" href="%s%s" title="%s">%s</a>' % (root, p["url"], html.escape(p["title"]), label)
-
-    for n, p in enumerate(posts):
-        newer = posts[n - 1] if n > 0 else None
-        older = posts[n + 1] if n + 1 < len(posts) else None
-        words = len(p["body"].split())
-        inner = fill(tpl("post.html"), content=markdown(p["body"], "../"),
-                     title=html.escape(p["title"]), date=p["date_str"], read_time=max(1, round(words / 200)),
-                     tags=(" &middot; filed under: " + html.escape(", ".join(p["tags"]))) if p["tags"] else "",
-                     newer=nav("&lt; Newer post", newer, "../"), older=nav("Older post &gt;", older, "../"))
-        write(Path(p["url"]), p["title"], inner)
-
-    print("Built %d posts and %d pages into docs/  (open docs/index.html)" % (len(posts), pages + 1))
+    print("Built %d posts into docs/  (open docs/index.html)" % len(posts))
 
 
 if __name__ == "__main__":

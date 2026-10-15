@@ -3,14 +3,28 @@
 Write posts in Markdown, run one command, get a plain HTML + CSS site.
 
     content/posts/   one .md file per blog post
-    content/pages/   home, about, links, guestbook, help (also .md)
-    templates/       layout.html (page frame) and post.html
-    docs/            the finished website: open docs/index.html, upload this folder
+    content/pages/   home.md (intro on the front page) and about.md
+    templates/       layout.html (the window and menu bar)
+    docs/            the finished website. Open docs/index.html. GitHub Pages serves this folder.
     build.py         the builder (Python 3, nothing to install)
 
-New post: add a .md file to content/posts/, then run:
+## New post
+Add a file like `content/posts/my-post.md`:
 
-    python build.py
+    ---
+    title: My new post
+    date: 2026-10-20
+    ---
+    Your text here, in Markdown.
 
-(on Windows you may need `py build.py`). The built pages in docs/ are regenerated every time, so edit the .md files and templates, not the .html files.
-Full instructions are on the Help page of the site.
+Then run `python build.py` (on Windows maybe `py build.py`).
+To edit a post, change its .md file and run the build again. To delete one, delete the .md file and run it again.
+Add `draft: true` under the date to hide a post for now.
+
+## Markdown
+`## Heading`, `**bold**`, `*italic*`, `[text](https://example.com)`, `- bullets`, `1. numbers`, `> quote`, `---` divider,
+`![alt](/images/pic.png)` for images saved in docs/images/. A link starting with / points inside your site, like `[About](/about.html)`.
+
+## Look
+Colors: top of docs/css/style.css. Window and menu: templates/layout.html. Blog name: top of build.py.
+Never edit the .html files in docs/ by hand: they are rebuilt every time.
