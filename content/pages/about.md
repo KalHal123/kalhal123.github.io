@@ -3,10 +3,13 @@ title: About
 ---
 # About
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Hello! My name is Thph online i go by uhm8, Th, Thp and variations. I love computers, coding, music, linux, doing silly things!
+I am also in a lot of fandoms, anime, games, coding, programs, mysteries, args, and so on and on just think of any ill proooobably know it. 
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+You can contact me on discord, my username is: th_793
 
-## Lorem ipsum
+:D
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+_- Th_
+
+

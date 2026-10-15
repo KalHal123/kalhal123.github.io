@@ -1,6 +1,6 @@
 ---
 title: Home
 ---
-# Lorem ipsum dolor sit amet
+# My website!
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+This is the homepage! look at all the posts on the all posts page or look at my latest one by clicking latest post!
